@@ -8,6 +8,7 @@ import { notificationReducer } from "./reducers/notoficationReducer";
 import { timerReducer } from "./reducers/timerReducer";
 import { loggerMiddleware } from "./middleware/loggerMiddleware";
 import { commentReducer } from "./reducers/commentsReducer";
+import { commentApi } from "./rtk/api";
 
 // const result = redux.combineReducers({
 //   todos: todoReducer,
@@ -18,15 +19,19 @@ import { commentReducer } from "./reducers/commentsReducer";
 
 export const store = configureStore({
   reducer: {
+    // "name is you specified on reducerPath" rtk api specified
+    [commentApi.reducerPath]: commentApi.reducer,
+    commentReducer,
+
     todoReducer,
     notesReducer,
     notificationReducer,
     timerReducer,
-    commentReducer,
   },
 
   // middleware:[...getDefaultMiddleware(),loggerMiddleware]
   // getDefaultMiddleware is deprecated, use configureStore instead
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(loggerMiddleware),
+    getDefaultMiddleware().concat(commentApi.middleware, loggerMiddleware),
+  // You must know RTK middleware required  eg. "commentApi.middleware"
 });
